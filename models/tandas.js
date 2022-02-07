@@ -28,6 +28,10 @@ const TandasSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    doblada: {
+      type: Boolean,
+      required: true,
+    },
   },
   {
     versionKey: false,

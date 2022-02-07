@@ -22,6 +22,7 @@ router.get("/", async (req, res) => {
       description: element["description"],
       portada: element["portada"],
       estreno: element["estreno"],
+      doblada: element["doblada"],
       trailer: element["trailer"],
     });
   });
@@ -31,10 +32,10 @@ router.get("/", async (req, res) => {
 // add tandas
 router.post("/", async (req, res) => {
   try {
-    let { title, description, estreno, trailer } = req.body;
+    let { title, description, estreno, trailer, doblada } = req.body;
     let { portada } = req.files;
 
-    if (!(title && description && estreno && trailer && portada))
+    if (!(title && description && estreno && trailer && portada && doblada))
       return res.json({
         status: 500,
         smg: "complete los campos",
@@ -57,6 +58,7 @@ router.post("/", async (req, res) => {
       trailer: trailer,
       portada: response["link"],
       path: response["path"],
+      doblada: doblada,
     });
 
     await consulta.save();
@@ -98,10 +100,10 @@ router.delete("/:id", async (req, res) => {
 // update tandas
 router.put("/", async (req, res) => {
   try {
-    let { title, description, estreno, trailer, id } = req.body;
+    let { title, description, estreno, trailer, id, doblada } = req.body;
     let portada = req.files != null ? req.files.portada : null;
 
-    if (!(title && description && estreno && trailer && id))
+    if (!(title && description && estreno && trailer && id && doblada))
       return res.json({
         status: 500,
         smg: "complete los campos",
@@ -139,6 +141,7 @@ router.put("/", async (req, res) => {
         estreno: estreno,
         portada: response["link"],
         trailer: trailer,
+        doblada: doblada,
       });
     } else {
       await TandasShema.findByIdAndUpdate(id, {
@@ -146,6 +149,7 @@ router.put("/", async (req, res) => {
         description,
         estreno,
         trailer,
+        doblada,
       });
     }
 

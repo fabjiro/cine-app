@@ -1,1 +1,0 @@
-.fondo{display:flex;justify-content:center;overflow:auto}.button.add{position:absolute;bottom:5px;right:0}.fondo{width:100vw;height:100vh;background:rgba(1,1,1,.5);position:absolute;top:0;left:0}.ui.container{display:block}.cont.segment{overflow:auto;height:80vh}.cont.segment .item{cursor:pointer;transition:.2s ease-in-out}.cont.segment .item:hover{transform:scale(1.01)}
