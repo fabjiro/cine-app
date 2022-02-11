@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
     await compreImage(file);
 
     //upload and generate link image
-    let response = await uploadSharedLink(pathFile + portada.name, randomName);
+    let response = await uploadSharedLink(pathFile + file.name, randomName);
 
     //insert db
     const consulta = new ProximamenteShema({
@@ -54,6 +54,7 @@ router.post("/", async (req, res) => {
       smg: "added!!",
     });
   } catch (error) {
+    console.log(error);
     return res.json({
       status: 500,
       smg: "problem inserting",
