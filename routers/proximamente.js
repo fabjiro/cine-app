@@ -86,10 +86,12 @@ router.put("/", async (req, res) => {
   try {
     let { title, description, id } = req.body;
 
+    console.log(id);
+
     let portada = req.files != null ? req.files.portada : null;
 
     let elementResult = await ProximamenteShema.findById(id);
-    if (elementResult) {
+    if (!elementResult) {
       res.json({
         status: 500,
         smg: "verifique id",
