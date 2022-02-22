@@ -4,11 +4,11 @@ const fs = require("fs");
 //
 const dbx = new Dropbox({ accessToken: process.env.TOKENDBX });
 
-const uploadFile = async (dirFile, name) => {
+const uploadFile = async (pathLocal, pathCloud) => {
   // uploading file
   let response = await dbx.filesUpload({
-    path: `/Cine/Portadas/${name}`,
-    contents: fs.createReadStream(dirFile),
+    path: pathCloud,
+    contents: fs.createReadStream(pathLocal),
   });
 
   return {

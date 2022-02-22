@@ -21,7 +21,7 @@ const TandasSchema = new Schema(
       required: true,
     },
     path: {
-      type: String,
+      type: Array,
       required: true,
     },
     estreno: {
@@ -30,6 +30,10 @@ const TandasSchema = new Schema(
     },
     doblada: {
       type: Boolean,
+      required: true,
+    },
+    ytlink: {
+      type: String,
       required: true,
     },
   },

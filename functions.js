@@ -2,6 +2,7 @@ const sharp = require("sharp");
 const fs = require("fs");
 const { listFolder, uploadFile, createSharedFile } = require("./fileHosting");
 const { join } = require("path");
+const ytdl = require("ytdl-core");
 
 const pathFile = join(__dirname, "./temfiles/");
 
@@ -17,7 +18,7 @@ const generateUniqueName = async () => {
   return randomName;
 };
 
-const compreImage = async (file) => {
+const compreImage = async (file, randomName) => {
   await sharp(file.data)
     .resize({
       width: 864,
@@ -28,17 +29,36 @@ const compreImage = async (file) => {
     .png({
       quality: 75,
     })
-    .toFile(pathFile + file.name);
+    .toFile(pathFile + randomName);
   return true;
 };
 
-const uploadSharedLink = async (path, name) => {
-  let responseUpload = await uploadFile(path, name);
+const uploadSharedLink = async (pathLocal, pathCloud) => {
+  let responseUpload = await uploadFile(pathLocal, pathCloud);
   let responseShared = await createSharedFile(responseUpload["path"]);
-  await fs.unlink(path, (err) => {});
+  await fs.unlink(pathLocal, (err) => {});
   return {
     link: responseShared,
     path: responseUpload["path"],
   };
 };
-module.exports = { generateUniqueName, compreImage, uploadSharedLink };
+
+const dowloandYT = async (url) => {
+  return new Promise((resolve) => {
+    let writeableStream = fs.createWriteStream(
+      join(__dirname, "./temfiles/video.mp4")
+    );
+
+    writeableStream.on("finish", resolve);
+    ytdl(url, {
+      format: "mp4",
+      quality: "highest",
+    }).pipe(writeableStream);
+  });
+};
+module.exports = {
+  generateUniqueName,
+  compreImage,
+  uploadSharedLink,
+  dowloandYT,
+};

@@ -7,6 +7,7 @@ const {
   generateUniqueName,
   compreImage,
   uploadSharedLink,
+  dowloandYT,
 } = require("../functions");
 
 const router = Router();
@@ -29,35 +30,55 @@ router.get("/", async (req, res) => {
   res.json(salida);
 });
 
+router.post("/ytdl", async (req, res) => {
+  let { url } = req.body;
+  await dowloandYT(url);
+
+  res.send("hola mundo");
+});
+
 // add tandas
 router.post("/", async (req, res) => {
   try {
     let { title, description, estreno, trailer, doblada } = req.body;
     let { portada } = req.files;
 
-    if (!(title && description && estreno && trailer && portada && doblada))
+    if (!(title && description && estreno && trailer && portada && doblada)) {
       return res.json({
         status: 500,
         smg: "complete los campos",
       });
+    }
 
     // generar unico nombre
     let randomName = await generateUniqueName();
 
     //manipulando imagen
-    await compreImage(portada);
+    await compreImage(portada, randomName);
 
-    //upload and generate link image
-    let response = await uploadSharedLink(pathFile + portada.name, randomName);
+    // upload portada and shared link
+    let resPortada = await uploadSharedLink(
+      pathFile + randomName,
+      `/Cine/Portadas/${randomName}`
+    );
+    // dowloand video
+    await dowloandYT(trailer);
+
+    // upload trailer and shared link
+    let resTrailer = await uploadSharedLink(
+      pathFile + "video.mp4",
+      `/Cine/Trailers/${randomName.replace(".png", ".mp4")}`
+    );
 
     //insert db
     let consulta = new TandasShema({
       title: title,
       description: description,
       estreno: estreno,
-      trailer: trailer,
-      portada: response["link"],
-      path: response["path"],
+      trailer: resTrailer["link"],
+      portada: resPortada["link"],
+      path: [resPortada["path"], resTrailer["path"]],
+      ytlink: trailer,
       doblada: doblada,
     });
 
@@ -83,7 +104,8 @@ router.delete("/:id", async (req, res) => {
   try {
     let { id } = req.params;
     let result = await TandasShema.findById(id);
-    await deleteFile(result["path"]);
+    await deleteFile(result["path"][0]);
+    await deleteFile(result["path"][1]);
     await TandasShema.deleteOne({ _id: id });
     return res.json({
       status: 200,
@@ -165,4 +187,5 @@ router.put("/", async (req, res) => {
     });
   }
 });
+
 module.exports = router;
