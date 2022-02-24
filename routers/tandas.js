@@ -24,17 +24,10 @@ router.get("/", async (req, res) => {
       portada: element["portada"],
       estreno: element["estreno"],
       doblada: element["doblada"],
-      trailer: element["trailer"],
+      trailer: element["ytlink"],
     });
   });
   res.json(salida);
-});
-
-router.post("/ytdl", async (req, res) => {
-  let { url } = req.body;
-  await dowloandYT(url);
-
-  res.send("hola mundo");
 });
 
 // add tandas
@@ -142,7 +135,7 @@ router.put("/", async (req, res) => {
 
     if (portada != null) {
       //borrando archivo actual
-      await deleteFile(elementResult["path"]);
+      await deleteFile(elementResult["path"][0]);
 
       // generate unique name file Cloud
       let randomName = await generateUniqueName();
@@ -153,27 +146,44 @@ router.put("/", async (req, res) => {
       //upload and generate link image
       let response = await uploadSharedLink(
         pathFile + portada.name,
-        randomName
+        `/Cine/Portadas/${randomName}`
       );
-
+      elementResult["path"][0] = response["path"];
       await TandasShema.findByIdAndUpdate(id, {
-        title: title,
-        description: description,
-        path: response["path"],
-        estreno: estreno,
+        path: elementResult["path"],
         portada: response["link"],
-        trailer: trailer,
-        doblada: doblada,
-      });
-    } else {
-      await TandasShema.findByIdAndUpdate(id, {
-        title,
-        description,
-        estreno,
-        trailer,
-        doblada,
       });
     }
+
+    if (elementResult["trailer"] != trailer) {
+      let randomName = await generateUniqueName();
+
+      await deleteFile(elementResult["path"][1]);
+
+      // dowloand video
+      await dowloandYT(trailer);
+
+      // upload trailer and shared link
+      let resTrailer = await uploadSharedLink(
+        pathFile + "video.mp4",
+        `/Cine/Trailers/${randomName.replace(".png", ".mp4")}`
+      );
+
+      elementResult["path"][1] = resTrailer["path"];
+
+      await TandasShema.findByIdAndUpdate(id, {
+        path: elementResult["path"],
+        trailer: resTrailer["link"],
+        ytlink: trailer,
+      });
+    }
+
+    await TandasShema.findByIdAndUpdate(id, {
+      title,
+      description,
+      estreno,
+      doblada,
+    });
 
     res.json({
       status: 200,
