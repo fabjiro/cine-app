@@ -24,7 +24,8 @@ router.get("/", async (req, res) => {
       portada: element["portada"],
       estreno: element["estreno"],
       doblada: element["doblada"],
-      trailer: element["ytlink"],
+      trailer: element["trailer"],
+      ytlink: element["ytlink"],
     });
   });
   res.json(salida);
