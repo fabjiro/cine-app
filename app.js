@@ -46,7 +46,6 @@ app.use("/api/proximamente", require("./routers/proximamente"));
 app.use("/api/tandas", require("./routers/tandas"));
 app.use("/api/useradmin", require("./routers/useradmin"));
 app.use("/api/carteleras", require("./routers/carteleras"));
-app.use("/api/state", require("./routers/state"));
 // app.use(require("./routers/front"));
 
 module.exports = app;

@@ -24,6 +24,17 @@ router.get("/state", async (req, res) => {
   });
 });
 
+router.put("/state", async (req, res) => {
+  let { id } = req.body;
+  await StatesShema.findByIdAndUpdate("620f3b59204c42ad273060fc", {
+    currentCartelera: id,
+  });
+  res.json({
+    status: 200,
+    smg: "upgraded!!!",
+  });
+});
+
 router.get("/all", async (req, res) => {
   let carteleras = await CarteleraShema.find();
   res.json(carteleras);
