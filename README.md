@@ -1,7 +1,7 @@
 # Cineapp
 Aplicacion movil cine
 
-# Release
+# Releases
 https://www.dropbox.com/sh/e6nq0ztrb6joi86/AAATtIREV5VzUdO-DZuE1kW_a?dl=0
 
 # Capturas
