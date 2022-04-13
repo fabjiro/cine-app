@@ -7,7 +7,6 @@ import 'package:cineapp/models/Mtandas.dart';
 import 'package:cineapp/pages/PageHome/Details/VideoBuilder.dart';
 import 'package:cineapp/pages/PageHome/Details/VideoIndicator.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
 
