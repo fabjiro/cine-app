@@ -7,6 +7,7 @@ import 'package:cineapp/models/Mtandas.dart';
 import 'package:cineapp/pages/PageHome/Details/VideoBuilder.dart';
 import 'package:cineapp/pages/PageHome/Details/VideoIndicator.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
 
@@ -26,17 +27,7 @@ class DetailInfoPage extends StatefulWidget {
 
 class _DetailInfoPageState extends State<DetailInfoPage>
     with AutomaticKeepAliveClientMixin {
-  @override
-  void initState() {
-    super.initState();
-    videoController = VideoPlayerController.network(widget.itemTandas.trailer)
-      ..addListener(() => setState(() {}))
-      ..setLooping(true)
-      ..initialize().then((value) {
-        videoController.play();
-        hideControls();
-      });
-  }
+  bool firstLoad = true;
 
   hideControls() {
     t = new Timer(Duration(seconds: 3), () {
@@ -95,89 +86,120 @@ class _DetailInfoPageState extends State<DetailInfoPage>
             SizedBox(
               height: 2.h,
             ),
-            Stack(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    if (t.isActive) t.cancel();
-
-                    if (!videoController.value.isPlaying &&
-                        showControls == true) {
-                      return;
-                    }
-
-                    if (videoController.value.isPlaying) {
-                      if (showControls == false) {
-                        hideControls();
-                        setState(() => showControls = true);
-                      } else if (showControls == true) {
-                        setState(() => showControls = false);
-                      }
-                      return;
-                    }
-                  },
-                  child: VideoBuilder(controller: videoController),
-                ),
-                Visibility(
-                  visible: showControls,
-                  child: Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: GestureDetector(
-                        onTap: () {
-                          (t.isActive && videoController.value.isPlaying)
-                              ? t.cancel()
-                              : hideControls();
-                          videoController.value.isPlaying
-                              ? videoController.pause()
-                              : videoController.play();
-                        },
-                        child: videoController.value.isPlaying
-                            ? Icon(
-                                Icons.pause,
-                                size: 30.sp,
-                                color: Colors.white,
-                              )
-                            : Icon(
-                                Icons.play_arrow,
-                                size: 30.sp,
-                                color: Colors.white,
-                              ),
+            firstLoad
+                ? Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        firstLoad = false;
+                        videoController = VideoPlayerController.network(
+                            widget.itemTandas.trailer)
+                          ..addListener(() => setState(() {}))
+                          ..setLooping(true)
+                          ..initialize().then((value) {
+                            videoController.play();
+                            hideControls();
+                          });
+                      },
+                      child: Container(
+                        width: 90.w,
+                        height: 26.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.play_arrow_rounded,
+                            size: 70.sp,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                Visibility(
-                  visible: showControls,
-                  child: Positioned(
-                    bottom: 0,
-                    right: 0,
-                    left: 0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: VideoIndicator(
-                            controller: videoController,
+                  )
+                : Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if (t.isActive) t.cancel();
+
+                          if (!videoController.value.isPlaying &&
+                              showControls == true) {
+                            return;
+                          }
+
+                          if (videoController.value.isPlaying) {
+                            if (showControls == false) {
+                              hideControls();
+                              setState(() => showControls = true);
+                            } else if (showControls == true) {
+                              setState(() => showControls = false);
+                            }
+                            return;
+                          }
+                        },
+                        child: VideoBuilder(controller: videoController),
+                      ),
+                      Visibility(
+                        visible: showControls,
+                        child: Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () {
+                                (t.isActive && videoController.value.isPlaying)
+                                    ? t.cancel()
+                                    : hideControls();
+                                videoController.value.isPlaying
+                                    ? videoController.pause()
+                                    : videoController.play();
+                              },
+                              child: videoController.value.isPlaying
+                                  ? Icon(
+                                      Icons.pause,
+                                      size: 30.sp,
+                                      color: Colors.white,
+                                    )
+                                  : Icon(
+                                      Icons.play_arrow,
+                                      size: 30.sp,
+                                      color: Colors.white,
+                                    ),
+                            ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => VideoFullScreen()),
-                          ),
-                          child: Icon(
-                            Icons.fullscreen,
-                            color: Colors.white,
-                            size: 22.sp,
+                      ),
+                      Visibility(
+                        visible: showControls,
+                        child: Positioned(
+                          bottom: 0,
+                          right: 0,
+                          left: 0,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: VideoIndicator(
+                                  controller: videoController,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => VideoFullScreen()),
+                                ),
+                                child: Icon(
+                                  Icons.fullscreen,
+                                  color: Colors.white,
+                                  size: 22.sp,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
           ],
         ),
       ),
