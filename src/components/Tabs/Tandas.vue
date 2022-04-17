@@ -6,10 +6,18 @@
       @done="doneAdd"
     ></AddTandas>
 
+    <EditDialog
+      v-if="state.dialog.edit"
+      :dialog="state.dialog.edit"
+      :isload="state.isload.edit"
+      :item="current.item"
+      @cancel="toggleEdit"
+    ></EditDialog>
+
     <DeleteDialog
       :dialog="state.dialog.delete"
-      :cancel="toggleDelete"
       :isload="state.isload.delete"
+      :cancel="toggleDelete"
       @deleted="deleteTandas"
     ></DeleteDialog>
 
@@ -34,6 +42,7 @@
         :color="colors[numerRandom()]"
         :item="item"
         @deleted="pressDelete"
+        @click_card="pressEdit"
       ></CardView>
     </v-row>
     <v-btn
@@ -53,18 +62,25 @@ import axios from "../../services/axios";
 import CardView from "../../components/CardView.vue";
 import AddTandas from "../../components/Dialog/Tandas/AddTandas";
 import DeleteDialog from "../Dialog/Tandas/DialogDelete";
+import EditDialog from "../Dialog/Tandas/Edit";
 
 export default {
   data: () => {
     return {
+      current: {
+        id: "",
+        item: "",
+      },
       state: {
         dialog: {
           delete: false,
           add: false,
+          edit: false,
         },
         isload: {
           add: false,
           delete: false,
+          edit: false,
         },
         request: false,
         id: "",
@@ -83,6 +99,10 @@ export default {
     pressDelete(e) {
       this.state.id = e;
       this.toggleDelete();
+    },
+    pressEdit(e) {
+      this.current.item = e;
+      this.toggleEdit();
     },
     async deleteTandas() {
       this.state.isload.delete = true;
@@ -103,6 +123,9 @@ export default {
     toggleDelete() {
       this.state.dialog.delete = !this.state.dialog.delete;
     },
+    toggleEdit() {
+      this.state.dialog.edit = !this.state.dialog.edit;
+    },
     numerRandom() {
       return Math.floor(Math.random() * this.colors.length);
     },
@@ -121,6 +144,7 @@ export default {
     CardView,
     AddTandas,
     DeleteDialog,
+    EditDialog,
   },
 };
 </script>

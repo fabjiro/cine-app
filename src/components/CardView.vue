@@ -1,7 +1,11 @@
 <template>
   <v-col cols="12" sm="4" md="4">
     <v-hover v-slot="{ hover }" open-delay="200">
-      <v-card :color="color" :elevation="hover ? 10 : 2">
+      <v-card
+        :color="color"
+        :elevation="hover ? 10 : 2"
+        @click="$emit('click_card', item)"
+      >
         <v-app-bar flat color="rgba(0,0,0,0)">
           <v-chip class="ma-2" color="black" text-color="white" dense>
             <h4>{{ item.title }}</h4>
