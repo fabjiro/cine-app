@@ -54,7 +54,9 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="error" @click="$emit('cancel')"> Cancelar </v-btn>
-        <v-btn color="primary"> Guardar </v-btn>
+        <v-btn color="primary" @click="$emit('saved', edititem)">
+          Guardar
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -72,7 +74,6 @@ export default {
   },
   created() {
     this.edititem = Object.assign({}, this.item);
-    console.log(this.item);
   },
 };
 </script>

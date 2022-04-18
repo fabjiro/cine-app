@@ -1,11 +1,7 @@
 <template>
   <v-col cols="12" sm="4" md="4">
     <v-hover v-slot="{ hover }" open-delay="200">
-      <v-card
-        :color="color"
-        :elevation="hover ? 10 : 2"
-        @click="$emit('click_card', item)"
-      >
+      <v-card :color="color" :elevation="hover ? 10 : 2">
         <v-app-bar flat color="rgba(0,0,0,0)">
           <v-chip class="ma-2" color="black" text-color="white" dense>
             <h4>{{ item.title }}</h4>
@@ -24,6 +20,7 @@
 
         <v-container
           class="d-flex flex-column justify-space-between align-center"
+          @click="$emit('click_card', item)"
         >
           <v-img
             :src="item.portada"

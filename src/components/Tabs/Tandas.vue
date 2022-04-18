@@ -12,6 +12,7 @@
       :isload="state.isload.edit"
       :item="current.item"
       @cancel="toggleEdit"
+      @saved="editTandas"
     ></EditDialog>
 
     <DeleteDialog
@@ -103,6 +104,25 @@ export default {
     pressEdit(e) {
       this.current.item = e;
       this.toggleEdit();
+    },
+    async editTandas(e) {
+      let form = new FormData();
+      this.state.isload.edit = true;
+
+      form.append("title", e.title);
+      form.append("description", e.description);
+      form.append("trailer", e.ytlink);
+      form.append("id", e.id);
+      form.append("doblada", e.doblada);
+      form.append("estreno", e.estreno);
+
+      let res = await axios.put("/api/tandas", form);
+      this.state.isload.edit = false;
+
+      if (res.data["status"] == 200) {
+        this.loadTandas();
+        this.toggleEdit();
+      }
     },
     async deleteTandas() {
       this.state.isload.delete = true;
