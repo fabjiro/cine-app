@@ -22,7 +22,7 @@
   </div>
 
   <ModalAdd
-    @added="added"
+    @added="modal.add = false"
     @close="modal.add = false"
     v-if="modal.add"
   ></ModalAdd>
@@ -31,11 +31,13 @@
     :item="state.currentItem"
     v-if="modal.edit"
     @close="modal.edit = false"
-    @deleted="deleted"
+    @deleted="modal.edit = false"
   ></ModalEdit>
 </template>
 <script>
 import axios from "../../services/axios";
+import socket from "../../services/socket";
+
 import LoadAnimation from "../LoadAnimation";
 import ErrorConection from "../ErrorConection";
 import ModalAdd from "../Tandas/add";
@@ -57,14 +59,6 @@ export default {
     };
   },
   methods: {
-    added() {
-      this.modal.add = false;
-      this.getTandas();
-    },
-    deleted() {
-      this.modal.edit = false;
-      this.getTandas();
-    },
     edit(e) {
       this.modal.edit = true;
       this.state.currentItem = e;
@@ -84,6 +78,10 @@ export default {
   },
   created() {
     this.getTandas();
+
+    socket._io.on("refresh:tandas", (data) => {
+      this.items = data;
+    });
   },
   components: {
     LoadAnimation,
