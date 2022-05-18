@@ -1,0 +1,54 @@
+.modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .content {
+            width: 70%;
+            height: 80%;
+            user-select: none;
+    
+            padding: .5rem;
+    
+            display: grid;
+            grid-template-columns: auto auto auto;
+            grid-template-rows: 13% auto 10%;
+            gap: .5rem;
+    
+            .header {
+                grid-column: span 3;
+                padding: 0 2rem;
+    
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+    
+                .close {
+                    font-size: 2rem;
+                    cursor: pointer;
+                }
+            }
+    
+            .cont {
+                grid-row: span 1;
+                grid-column: span 3;
+                overflow: auto;
+                padding: 0 1rem;
+    
+                .toggle {
+                    margin-right: 1rem;
+                }
+            }
+    
+            .actions {
+                grid-row: span 1;
+                grid-column: span 3;
+    
+                display: flex;
+                align-items: center;
+                justify-content: end;
+                gap: .5rem;
+                padding: 0 1rem;
+            }
+        }
+}

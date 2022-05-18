@@ -1,6 +1,11 @@
 <template>
   <div class="content tandas box" v-if="!state.request">
-    <div v-for="(item, index) in items" :key="index" class="card box">
+    <div
+      v-for="(item, index) in items"
+      :key="index"
+      class="card box"
+      @click="edit(item)"
+    >
       <img :src="item.portada" />
       <div class="content">
         <span class="title">{{ item.title }}</span>
@@ -21,12 +26,20 @@
     @close="modal.add = false"
     v-if="modal.add"
   ></ModalAdd>
+
+  <ModalEdit
+    :item="state.currentItem"
+    v-if="modal.edit"
+    @close="modal.edit = false"
+    @deleted="deleted"
+  ></ModalEdit>
 </template>
 <script>
 import axios from "../../services/axios";
 import LoadAnimation from "../LoadAnimation";
 import ErrorConection from "../ErrorConection";
 import ModalAdd from "../Tandas/add";
+import ModalEdit from "../Tandas/edit";
 
 export default {
   data: () => {
@@ -34,10 +47,12 @@ export default {
       items: [],
       modal: {
         add: false,
+        edit: false,
       },
       state: {
         request: true,
         status: "none",
+        currentItem: null,
       },
     };
   },
@@ -45,6 +60,14 @@ export default {
     added() {
       this.modal.add = false;
       this.getTandas();
+    },
+    deleted() {
+      this.modal.edit = false;
+      this.getTandas();
+    },
+    edit(e) {
+      this.modal.edit = true;
+      this.state.currentItem = e;
     },
     async getTandas() {
       try {
@@ -66,6 +89,7 @@ export default {
     LoadAnimation,
     ErrorConection,
     ModalAdd,
+    ModalEdit,
   },
 };
 </script>
