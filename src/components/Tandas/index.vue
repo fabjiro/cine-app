@@ -1,14 +1,10 @@
 <template>
   <div class="content tandas box" v-if="!state.request">
-    <div
-      v-for="(item, index) in items"
-      :key="index"
-      class="card box"
-      :style="{
-        'background-image': `url(${item.portada})`,
-      }"
-    >
-      <span class="title">{{ item.title }}</span>
+    <div v-for="(item, index) in items" :key="index" class="card box">
+      <img :src="item.portada" />
+      <div class="content">
+        <span class="title">{{ item.title }}</span>
+      </div>
     </div>
     <div class="btn-add" @click="modal.add = true">
       <i class="fa-solid fa-add"></i>

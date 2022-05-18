@@ -19,36 +19,23 @@
         user-select: none;
         cursor: pointer;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        padding: 10px 10px;
-        color: white;
+        color: var(--text_color);
         height: 100%;
         width: 100%;
+        img{
+            height: 70%;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
 
-        &:hover{
+        .content{
+            padding: 5px;
             .title{
-                display: block;
+                font-size: 1rem;
+                font-weight: bold;
             }
         }
-        .title{
-            padding: .5rem .8rem;
-            font-size: .9rem;
-            display: none;
-            transition: ease-in-out .3s;
-
-            // background: rgba(0, 0, 0, .9);
-            // color: white;
-            // border-radius: 4px;
-            background: rgba(255, 255, 255, 0.45);
-                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                border-radius: 10px;
-                border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-
 
     }
 
