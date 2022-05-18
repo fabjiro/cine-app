@@ -3,6 +3,8 @@ const { join } = require("path");
 const { deleteFile } = require("../fileHosting");
 const TandasShema = require("../models/tandas");
 const pathFile = join(__dirname, "../temfiles/");
+const socket = require("../socket");
+
 const {
   generateUniqueName,
   compreImage,
@@ -77,6 +79,7 @@ router.post("/", async (req, res) => {
     });
 
     await consulta.save();
+    refreshTandas();
 
     res.json({
       status: 200,
@@ -101,6 +104,8 @@ router.delete("/:id", async (req, res) => {
     await deleteFile(result["path"][0]);
     await deleteFile(result["path"][1]);
     await TandasShema.deleteOne({ _id: id });
+
+    refreshTandas();
     return res.json({
       status: 200,
       smg: "deleted",
@@ -186,6 +191,7 @@ router.put("/", async (req, res) => {
       doblada,
     });
 
+    refreshTandas();
     res.json({
       status: 200,
       smg: "changed!!",
@@ -199,4 +205,21 @@ router.put("/", async (req, res) => {
   }
 });
 
+async function refreshTandas() {
+  let tandas = await TandasShema.find();
+  let salida = [];
+  tandas.forEach((element) => {
+    salida.push({
+      id: element["_id"],
+      title: element["title"],
+      description: element["description"],
+      portada: element["portada"],
+      estreno: element["estreno"],
+      doblada: element["doblada"],
+      trailer: element["trailer"],
+      ytlink: element["ytlink"],
+    });
+  });
+  socket.io.emit("refresh:tandas", salida);
+}
 module.exports = router;
