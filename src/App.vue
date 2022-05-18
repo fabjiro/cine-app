@@ -2,6 +2,15 @@
   <router-view />
 </template>
 
+<script>
+import socket from "./services/socket";
+export default {
+  created() {
+    socket.config("http://192.168.1.5:3000/");
+  },
+};
+</script>
+
 <style>
 :root {
   --primary_color: #f3f3f3;
