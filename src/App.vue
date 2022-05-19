@@ -6,7 +6,7 @@
 import socket from "./services/socket";
 export default {
   created() {
-    socket.config("https://cinefabjiro.herokuapp.com");
+    socket.config("https://cine-fabjiro.herokuapp.com");
   },
 };
 </script>

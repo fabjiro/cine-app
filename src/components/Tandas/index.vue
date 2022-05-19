@@ -78,9 +78,10 @@ export default {
   },
   created() {
     this.getTandas();
-
+    let audio = new Audio("done.mp3"); // path to file
     socket._io.on("refresh:tandas", (data) => {
       this.items = data;
+      audio.play().then(() => {});
     });
   },
   components: {
