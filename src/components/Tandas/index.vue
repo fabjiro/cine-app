@@ -1,5 +1,5 @@
 <template>
-  <div class="content tandas box" v-if="!state.request">
+  <div class="content tandas box galery" v-if="!state.request">
     <div
       v-for="(item, index) in items"
       :key="index"

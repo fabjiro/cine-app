@@ -3,6 +3,7 @@
     <SideBar @onTap="onTab"></SideBar>
     <SearchBar></SearchBar>
     <Tandas v-if="state.tab == 1"></Tandas>
+    <Proximamente v-if="state.tab == 2"></Proximamente>
   </div>
 </template>
 
@@ -10,6 +11,7 @@
 import SideBar from "../components/SideBar.vue";
 import SearchBar from "../components/SearchBar.vue";
 import Tandas from "../components/Tandas/index.vue";
+import Proximamente from "../components/Proximamente/index.vue";
 
 export default {
   name: "home",
@@ -29,6 +31,7 @@ export default {
     SideBar,
     SearchBar,
     Tandas,
+    Proximamente,
   },
 };
 </script>

@@ -11,7 +11,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 :root {
   --primary_color: #f3f3f3;
   --secondary_color: white;
@@ -47,5 +47,44 @@ body {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
+}
+
+.galery {
+  display: grid;
+  padding: 10px;
+
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-auto-rows: minmax(200px, auto);
+
+  overflow: auto;
+
+  .card {
+    user-select: none;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    color: var(--text_color);
+    height: 100%;
+    width: 100%;
+    transition: ease-in-out 0.3s;
+    &:hover {
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      transform: scale(1.01);
+    }
+    img {
+      height: 70%;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .content {
+      padding: 5px;
+      .title {
+        font-size: 1rem;
+        font-weight: bold;
+      }
+    }
+  }
 }
 </style>
