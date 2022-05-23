@@ -11,7 +11,7 @@
         <span class="title">{{ item.title }}</span>
       </div>
     </div>
-    <div class="btn-add" @click="modal.add = true">
+    <div class="float-btn-add" @click="modal.add = true">
       <i class="fa-solid fa-add"></i>
     </div>
   </div>

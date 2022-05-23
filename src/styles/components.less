@@ -1,0 +1,48 @@
+.float-btn-add {
+    cursor: pointer;
+    background: blue;
+    color: white;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    position: fixed;
+    box-shadow: rgba(0, 0, 255, 0.2) 0px 3px 8px 4px;
+    bottom: 2rem;
+    right: 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: ease-in-out .3s;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes progres_animation {
+    0% {
+        transform: translateX(-60%);
+        width: 40%;
+    }
+
+    10% {
+        width: 5%;
+    }
+
+    30% {
+        transform: translateX(-60%);
+        width: 30%;
+    }
+
+    50% {
+        width: 20%;
+    }
+
+    100% {
+        border-radius: 12px;
+        transform: translateX(-150%);
+        width: 38%;
+    }
+}

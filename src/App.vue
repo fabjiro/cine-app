@@ -12,6 +12,7 @@ export default {
 </script>
 
 <style lang="less">
+@import "./styles/components";
 :root {
   --primary_color: #f3f3f3;
   --secondary_color: white;
