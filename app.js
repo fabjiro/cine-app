@@ -12,7 +12,7 @@ require("dotenv").config();
 const app = express();
 
 app.use(minify());
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
