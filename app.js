@@ -39,7 +39,7 @@ app.use(
 app.use(express.static(path.join(__dirname, "/public")));
 
 // settings
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 3030);
 
 //router
 app.use("/api/proximamente", require("./routers/proximamente"));

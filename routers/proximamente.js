@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { join } = require("path");
 const { deleteFile } = require("../fileHosting");
+const socket = require("../socket");
 const {
   generateUniqueName,
   compreImage,
@@ -30,25 +31,30 @@ router.get("/", async (req, res) => {
 // post peliculas
 router.post("/", async (req, res) => {
   try {
+    let { title, description } = req.body;
     const file = req.files.portada;
     // generate unique name file Cloud
     let randomName = await generateUniqueName();
     //compres image
-    await compreImage(file);
+    await compreImage(file, randomName);
 
     //upload and generate link image
-    let response = await uploadSharedLink(pathFile + file.name, randomName);
+    let response = await uploadSharedLink(
+      pathFile + randomName,
+      `/Cine/Portadas/${randomName}`
+    );
 
     //insert db
     const consulta = new ProximamenteShema({
-      title: req.body.title,
-      description: req.body.description,
+      title: title,
+      description: description,
       portada: response["link"],
       path: response["path"],
     });
 
     await consulta.save();
 
+    emitTandas();
     return res.json({
       status: 200,
       smg: "added!!",
@@ -69,6 +75,8 @@ router.delete("/:id", async (req, res) => {
     let result = await ProximamenteShema.findById(id);
     await deleteFile(result["path"]);
     await ProximamenteShema.deleteOne({ _id: id });
+
+    emitTandas();
     return res.json({
       status: 200,
       smg: "deleted",
@@ -123,6 +131,7 @@ router.put("/", async (req, res) => {
       await ProximamenteShema.findByIdAndUpdate(id, { title, description });
     }
 
+    emitTandas();
     res.json({
       status: 200,
       smg: "update!!",
@@ -134,5 +143,19 @@ router.put("/", async (req, res) => {
     });
   }
 });
+
+const emitTandas = async () => {
+  let peliculas = await ProximamenteShema.find();
+  let salida = [];
+  peliculas.forEach((element) => {
+    salida.push({
+      id: element["_id"],
+      title: element["title"],
+      description: element["description"],
+      portada: element["portada"],
+    });
+  });
+  socket.io.emit("server:proximamente", salida);
+};
 
 module.exports = router;
